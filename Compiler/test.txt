@@ -1,0 +1,9 @@
+int main()
+{
+    int a,b = 33,c = 22;
+    if(b > b) a = 0;
+    else a = 1;
+    c= getint();
+    printf("%d",c);
+    return c;
+}

@@ -1,0 +1,79 @@
+编译单元 CompUnit → {Decl} {FuncDef} MainFuncDef
+
+声明 Decl → ConstDecl | VarDecl
+
+常量声明 ConstDecl → 'const' BType ConstDef { ',' ConstDef } ';'
+
+基本类型 BType → 'int'
+
+常数定义 ConstDef → Ident '=' ConstInitVal
+
+常量初值 ConstInitVal → ConstExp
+| '{' [ ConstInitVal { ',' ConstInitVal } ] '}'
+
+变量声明 VarDecl → BType VarDef { ',' VarDef } ';'
+
+变量定义 VarDef → Ident | Ident '=' InitVal
+
+变量初值 InitVal → Exp | '{' [ InitVal { ',' InitVal } ] '}'
+
+函数定义 FuncDef → FuncType Ident '(' [FuncFParams] ')' Block
+
+主函数定义 MainFuncDef → 'int' 'main' '(' ')' Block
+
+函数类型 FuncType → 'void' | 'int'
+
+函数形参表 FuncFParams → FuncFParam { ',' FuncFParam }
+
+函数形参 FuncFParam → BType Ident ['[' ']' { '[' ConstExp ']' }]
+
+语句块 Block → '{' { BlockItem } '}'
+
+语句块项 BlockItem → Decl | Stmt
+
+语句 Stmt → LVal '=' Exp ';'
+| [Exp] ';'
+| Block
+| 'if' '(' Cond ')' Stmt [ 'else' Stmt ]
+| 'while' '(' Cond ')' Stmt
+| 'break' ';' | 'continue' ';'
+| 'return' [Exp] ';'
+| LVal '=' 'getint''('')'';'
+| 'printf''('FormatString{','Exp}')'';'
+
+表达式 Exp → AddExp
+
+条件表达式 Cond → LOrExp
+
+左值表达式 LVal → Ident 
+
+基本表达式 PrimaryExp → '(' Exp ')' | LVal | Number
+
+数值 Number → IntConst
+
+一元表达式 UnaryExp → PrimaryExp | Ident '(' [FuncRParams] ')'| UnaryOp UnaryExp
+
+单目运算符 UnaryOp → '+' | '−' | '!'
+
+函数实参表 FuncRParams → Exp { ',' Exp }
+
+乘除模表达式 MulExp → UnaryExp | MulExp ('*' | '/' | '%') UnaryExp
+
+加减表达式 AddExp → MulExp | AddExp ('+' | '−') MulExp
+
+关系表达式 RelExp → AddExp | RelExp ('<' | '>' | '<=' | '>=') AddExp
+
+相等性表达式 EqExp → RelExp | EqExp ('==' | '!=') RelExp
+
+逻辑与表达式 LAndExp → EqExp | LAndExp '&&' EqExp
+
+逻辑或表达式 LOrExp → LAndExp | LOrExp '||' LAndExp
+
+常量表达式 ConstExp → AddExp 
+
+identifier → identifier-nondigit
+| identifier identifier-nondigit
+| identifier digit
+
+integer-const → decimal-const | 0
+decimal-const → nonzero-digit | decimal-const digit
